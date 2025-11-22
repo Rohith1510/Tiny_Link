@@ -31,18 +31,17 @@ export default async function RedirectPage({ params }: RedirectPageProps) {
 
   // Increment clicks and update last_clicked timestamp
   // We must await this to ensure the update happens before the request context is torn down
-  const { error: updateError } = await supabase
-    .from('links')
-    // @ts-ignore - Supabase type inference issue with Update type
-    .update({
-      clicks: link.clicks + 1,
-      last_clicked: new Date().toISOString(),
-    })
-    .eq('code', code)
+  console.log('Attempting to update link:', code, 'Current clicks:', link.clicks)
+  // @ts-ignore - Custom Supabase RPC function
+  const { error: updateError } = await supabase.rpc('increment_clicks', {
+    link_code: code 
+  })
 
-  if (updateError) {
-    console.error('Error updating clicks:', updateError)
-  }
+if (updateError) {
+  console.error('Error updating clicks:', updateError)
+}
+  // console.log('Update result:', { updateData, updateError })
+
 
   // Perform 302 redirect to target URL
   redirect(link.target_url)
