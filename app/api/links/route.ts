@@ -86,6 +86,7 @@ export async function POST(request: NextRequest) {
         // Insert the new link
         const { data, error } = await supabase
             .from('links')
+            // @ts-ignore - Supabase type inference issue with Insert type
             .insert({
                 code: shortCode,
                 target_url: target_url,

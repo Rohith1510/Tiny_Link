@@ -31,7 +31,7 @@ export interface Link {
     created_at: string
 }
 
-export interface Database {
+export type Database = {
     public: {
         Tables: {
             links: {

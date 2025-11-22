@@ -5,7 +5,8 @@
  */
 
 import { redirect, notFound } from 'next/navigation'
-import { supabase } from '@/lib/supabaseClient'
+import { supabase, Database } from '@/lib/supabaseClient'
+import { Link } from '@/lib/supabaseClient'
 
 interface RedirectPageProps {
   params: {
@@ -21,7 +22,7 @@ export default async function RedirectPage({ params }: RedirectPageProps) {
     .from('links')
     .select('*')
     .eq('code', code)
-    .single() as { data: any, error: any } // Temporary cast to fix type inference
+    .single() as { data:Link|null, error: any } // Temporary cast to fix type inference
 
   // If link not found, show 404
   if (error || !link) {
@@ -32,6 +33,7 @@ export default async function RedirectPage({ params }: RedirectPageProps) {
   // We must await this to ensure the update happens before the request context is torn down
   const { error: updateError } = await supabase
     .from('links')
+    // @ts-ignore - Supabase type inference issue with Update type
     .update({
       clicks: link.clicks + 1,
       last_clicked: new Date().toISOString(),

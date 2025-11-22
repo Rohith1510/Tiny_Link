@@ -26,7 +26,7 @@ export default function NotFound() {
           
           {/* Description */}
           <p className="text-lg text-gray-400 mb-8">
-            The short link you're looking for doesn't exist or has been deleted.
+            The short link you&apos;re looking for doesn&apos;t exist or has been deleted.
           </p>
 
           {/* Actions */}
